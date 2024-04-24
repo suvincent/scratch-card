@@ -1,4 +1,4 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -30,4 +30,45 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+} */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
 }
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.canvas-container {
+  position: relative;
+  width: 65%;
+}
+
+.canvas-container canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1; /* All canvases have the same starting z-index */
+}
+
+.canvas-container canvas:last-child {
+  z-index: 2; /* This raises the z-index of the second (top) canvas */
+}
+
+.table-container {
+  position: relative;
+  display: inline;
+}
+
