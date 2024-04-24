@@ -18,7 +18,7 @@ export default function FirstGame() {
 
   return (
     <div className="App">
-      {/* <h2>刮刮樂小遊戲</h2> */}
+      <h2>刮刮樂小遊戲</h2>
       <ScratchCard width={width} height={height} numbers={answer} brushSize={20}/>
     </div>
   );

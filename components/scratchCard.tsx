@@ -81,7 +81,7 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
         <div style={{ display: 'flex', alignItems: 'stretch', flexWrap:'wrap' }}>
             <div style={{width:'35%', alignItems:'center', justifyContent:'center', flexGrow:1}}>
                 <h2>兌獎欄</h2>
-                <div>debug: {numbers.map((n)=>n.number).join(',')}</div>
+                {/* <div>debug: {numbers.map((n)=>n.number).join(',')}</div> */}
                 <h4>完成度: {completeRate} %</h4>
                 <p>說明: 只要刮中數字與中獎數字中獎數字完全吻合即獲得該獎金</p><p>在完成度達70%以上時會自動顯示結果</p>
                 <table style={{width: '450px',margin:'auto'}}>
@@ -110,9 +110,6 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
                     ref={canvasRef}
                     width={width}
                     height={height}
-                    onTouchStart={startScratch}
-                    onTouchEnd={endScratch}
-                    onTouchMove={scratch}
                     onMouseDown={startScratch}
                     onMouseUp={endScratch}
                     onMouseMove={scratch}
