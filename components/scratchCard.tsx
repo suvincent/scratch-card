@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import RandomNumbersCanvas from './RandomNumber';
-import { shuffle } from '@/lib/shuffle';
-import { randomNumberNotExist } from '@/lib/random';
+import { generatePrizeData } from '@/lib/random';
+import { item, prize } from '@/lib/type';
 
-const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number, height: number, numbers: any[], brushSize: number }) => {
+const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number, height: number, numbers: item[], brushSize: number }) => {
     const canvasRef = useRef(null);
     const [isScratching, setIsScratching] = useState(false);
-    const [winPrizeData, setWinPrizeData] = useState<any[]>([]); // [number, position, prize]
+    const [winPrizeData, setWinPrizeData] = useState<prize[]>([]); // [number, position, prize]
     const [completeRate, setCompleteRate] = useState(0);
     const [isShow, setIsShow] = useState(false); 
     // Initialize the canvas
@@ -24,37 +24,7 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
     useEffect(() => {
         // numbers are number in canvas
         if(numbers.length > 0){
-            let prizeData = numbers.map((num, index) => { return num.number });
-            shuffle(prizeData);
-            let prizeMeta = [
-                {prize: '10元', condition:1, winRate: 0.8},
-                {prize: '50元', condition:1, winRate: 0.5},
-                {prize: '100元', condition:3, winRate: 0.3},
-                {prize: '200元', condition:5, winRate: 0.1}
-            ]
-            let _winPrizeData = [];
-            for (let i = 0; i < prizeMeta.length; i++) {
-                // data format: {prize: string, winNumbers:number[], isWin: boolean}
-                let meta = prizeMeta[i];
-                let winRate = Math.random();
-                let isWin = winRate < meta.winRate;
-                let winNumbers = []
-                if(isWin){
-                    // 中獎
-                    for (let index = 0; index < meta.condition; index++) {
-                        winNumbers.push(prizeData.pop());
-                    }
-                }else{
-                    // 未中獎
-                    // assign a random number not equal to the prize number
-                    let n = randomNumberNotExist(prizeData)
-                    winNumbers.push(n)
-                    for (let index = 0; index < meta.condition-1; index++) {
-                        winNumbers.push(prizeData.pop());
-                    }
-                }
-                _winPrizeData.push({prize: meta.prize, winNumbers, isWin});
-            }
+            const _winPrizeData = generatePrizeData(numbers);
             setWinPrizeData(_winPrizeData);
         }
     }, [numbers]);
@@ -68,10 +38,10 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
     // Handle mouse events
     const startScratch = (e: any) => {
         setIsScratching(true);
-        scratch(e);
+        // scratch(e);
     };
 
-    const endScratch = () => {
+    const endScratch = (e:any) => {
         setIsScratching(false);
     };
 
@@ -108,9 +78,10 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
     };
 
     return (
-        <div style={{ display: 'flex', alignItems: 'stretch' }}>
-            <div style={{width:'35%', alignItems:'center', justifyContent:'center'}}>
+        <div style={{ display: 'flex', alignItems: 'stretch', flexWrap:'wrap' }}>
+            <div style={{width:'35%', alignItems:'center', justifyContent:'center', flexGrow:1}}>
                 <h2>兌獎欄</h2>
+                <div>debug: {numbers.map((n)=>n.number).join(',')}</div>
                 <h4>完成度: {completeRate} %</h4>
                 <p>說明: 只要刮中數字與中獎數字中獎數字完全吻合即獲得該獎金</p><p>在完成度達70%以上時會自動顯示結果</p>
                 <table style={{width: '450px',margin:'auto'}}>
@@ -139,9 +110,11 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
                     ref={canvasRef}
                     width={width}
                     height={height}
+                    onTouchStart={startScratch}
+                    onTouchEnd={endScratch}
+                    onTouchMove={scratch}
                     onMouseDown={startScratch}
                     onMouseUp={endScratch}
-                    onMouseOut={endScratch}
                     onMouseMove={scratch}
                     style={{ cursor: 'crosshair', zIndex: 5 }}
                 ></canvas>
@@ -149,7 +122,6 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
                 <RandomNumbersCanvas width={width} height={height} numbers={numbers} />
 
             </div>
-
         </div>
     );
 };
