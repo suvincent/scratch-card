@@ -50,8 +50,20 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
         const canvas:HTMLCanvasElement = canvasRef.current!;
         const ctx:CanvasRenderingContext2D  = canvas.getContext('2d')!;
         const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+
+        let x,y;
+
+        if ('touches' in e) {
+            const touch = e.touches[0];
+            x = touch.clientX - rect.left;
+            y = touch.clientY - rect.top;
+        } else {
+            x = e.clientX - rect.left;
+            y = e.clientY - rect.top;
+        }
+
+        // const x = e.clientX - rect.left;
+        // const y = e.clientY - rect.top;
         // 遮盖策略
         ctx.globalCompositeOperation = "destination-out";
         ctx.beginPath();
@@ -113,6 +125,9 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
                     onMouseDown={startScratch}
                     onMouseUp={endScratch}
                     onMouseMove={scratch}
+                    onTouchStart={startScratch}
+                    onTouchEnd={endScratch}
+                    onTouchMove={scratch}
                     style={{ cursor: 'crosshair', zIndex: 5 }}
                 ></canvas>
                 {/* <div className="text">終於要過二分之一的鐵人賽啦！！</div> */}
