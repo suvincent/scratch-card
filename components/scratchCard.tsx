@@ -22,6 +22,21 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
     }, [canvasRef]);
 
     useEffect(() => {
+        // Prevent scrolling on touch devices globally
+        const preventTouchScroll = (e: TouchEvent) => {
+            // @ts-ignore
+            if (canvasRef.current && canvasRef.current.contains(e.target as Node)) {
+                e.preventDefault();
+            }
+        };
+        document.addEventListener('touchmove', preventTouchScroll, { passive: false });
+
+        return () => {
+            document.removeEventListener('touchmove', preventTouchScroll);
+        };
+    }, []);
+
+    useEffect(() => {
         // numbers are number in canvas
         if(numbers.length > 0){
             const _winPrizeData = generatePrizeData(numbers);
@@ -38,7 +53,6 @@ const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number
     // Handle mouse events
     const startScratch = (e: any) => {
         setIsScratching(true);
-        // scratch(e);
     };
 
     const endScratch = (e:any) => {
