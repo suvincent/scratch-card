@@ -54,25 +54,32 @@ table {
 .canvas-container {
   position: relative;
   width: 90%;
-  margin: auto; /* Centers horizontally */
+  margin: auto;
+  /* Centers horizontally */
   display: flex;
-  justify-content: center; /* Ensures children are centered */
-  align-items: center; /* Centers vertically if parent allows */
+  justify-content: center;
+  /* Ensures children are centered */
+  align-items: center;
+  /* Centers vertically if parent allows */
 }
 
 .canvas-container canvas {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 1; /* All canvases have the same starting z-index */
+  z-index: 1;
+  /* All canvases have the same starting z-index */
+  border: 3px solid #333;
+  /* Adjust color and thickness as needed */
+  border-radius: 10px;
 }
 
 .canvas-container canvas:last-child {
-  z-index: 2; /* This raises the z-index of the second (top) canvas */
+  z-index: 2;
+  /* This raises the z-index of the second (top) canvas */
 }
 
 .table-container {
   position: relative;
   display: inline;
 }
-

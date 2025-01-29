@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const AnswerLayer = ({ width, height, numbers }:{width: number, height: number, numbers:any[]}) => {
+const AnswerLayer = ({ width, height, numbers }: { width: number, height: number, numbers: any[] }) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -11,12 +11,12 @@ const AnswerLayer = ({ width, height, numbers }:{width: number, height: number, 
         // Draw each number
         numbers.forEach(num => {
             ctx.fillStyle = 'black';
-            ctx.font = '40px Arial';
+            ctx.font = width < 500 ? '20px Arial' : '40px Arial';
             ctx.fillText(num.number, num.x, num.y);
         });
     }, [width, height, numbers]);
 
-    return <canvas ref={canvasRef} width={width} height={height} style={{zIndex:1}}/>;
+    return <canvas ref={canvasRef} width={width} height={height} style={{ zIndex: 1 }} />;
 };
 
 export default AnswerLayer;

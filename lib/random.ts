@@ -24,12 +24,13 @@ export function randomNumberNotExist(numbers: number[]) {
     return returnValue;
 }
 
-export function generateRandomNumbersAndPositions(count: number, width: number, height: number){
-    const numbers:item[] = [];
+export function generateRandomNumbersAndPositions(count: number, width: number, height: number) {
+    const numbers: item[] = [];
     while (numbers.length < count) {
         const number = Math.floor(Math.random() * 100);
-        const x = Math.random() * (width - 120) + 50;  // Ensure numbers fit within canvas
-        const y = Math.random() * (height - 120) + 50;
+        const adjustOffset = width < 500 ? 20 : 50;
+        const x = Math.random() * (width * 0.8) + adjustOffset;  // Ensure numbers fit within canvas
+        const y = Math.random() * (height * 0.8) + adjustOffset;
 
         // Check for overlap
         let overlapping = false;
@@ -37,11 +38,11 @@ export function generateRandomNumbersAndPositions(count: number, width: number, 
         let isExist = false;
         for (let other of numbers) {
             const distance = Math.sqrt((other.x - x) ** 2 + (other.y - y) ** 2);
-            if (distance < 100) {  // Assuming a minimal distance to prevent overlap
+            if (distance < width * 0.1) {  // Assuming a minimal distance to prevent overlap
                 overlapping = true;
                 break;
             }
-            if(other.number == number){
+            if (other.number == number) {
                 isExist = true;
                 break;
             }
@@ -54,14 +55,14 @@ export function generateRandomNumbersAndPositions(count: number, width: number, 
     return numbers;
 }
 
-export function generatePrizeData(numbers: item[]):prize[]{
-    let prizeData: number[] = numbers.map((num:item, index) => { return num.number });
+export function generatePrizeData(numbers: item[]): prize[] {
+    let prizeData: number[] = numbers.map((num: item, index) => { return num.number });
     shuffle(prizeData);
     let prizeMeta: meta[] = [
-        {prize: '10元', condition:1, winRate: 0.8},
-        {prize: '50元', condition:1, winRate: 0.5},
-        {prize: '100元', condition:3, winRate: 0.3},
-        {prize: '200元', condition:5, winRate: 0.1}
+        { prize: '10元', condition: 1, winRate: 0.8 },
+        { prize: '50元', condition: 1, winRate: 0.5 },
+        { prize: '100元', condition: 3, winRate: 0.3 },
+        { prize: '200元', condition: 5, winRate: 0.1 }
     ]
     let _winPrizeData: prize[] = [];
     for (let i = 0; i < prizeMeta.length; i++) {
@@ -69,22 +70,22 @@ export function generatePrizeData(numbers: item[]):prize[]{
         let meta = prizeMeta[i];
         let winRate = Math.random();
         let isWin = winRate < meta.winRate;
-        let winNumbers:number[] = [];
-        if(isWin){
+        let winNumbers: number[] = [];
+        if (isWin) {
             // 中獎
             for (let index = 0; index < meta.condition; index++) {
                 winNumbers.push(prizeData.pop()!);
             }
-        }else{
+        } else {
             // 未中獎
             // assign a random number not equal to the prize number
             let n = randomNumberNotExist(prizeData)
             winNumbers.push(n)
-            for (let index = 0; index < meta.condition-1; index++) {
+            for (let index = 0; index < meta.condition - 1; index++) {
                 winNumbers.push(prizeData.pop()!);
             }
         }
-        _winPrizeData.push({prize: meta.prize, winNumbers, isWin});
+        _winPrizeData.push({ prize: meta.prize, winNumbers, isWin });
     }
     return _winPrizeData;
 }

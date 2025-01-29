@@ -9,10 +9,10 @@ export default function FirstGame() {
 
   // Function to update the size dynamically
   const updateSize = () => {
-    const w = window.innerWidth ?? window.screen?.width
-    const newWidth = Math.min(w * 0.9, 1000); // Max width 1000px
-    const newHeight = (newWidth * 3) / 5; // Maintain aspect ratio (1000:600 → 5:3)
-    
+    const w = window.innerWidth
+    const newWidth = Math.floor(Math.min(w * 0.9, 1000)); // Max width 1000px
+    const newHeight = Math.floor((newWidth * 3) / 5); // Maintain aspect ratio (1000:600 → 5:3)
+
     setWidth(newWidth);
     setHeight(newHeight);
   };
@@ -22,7 +22,7 @@ export default function FirstGame() {
   }, []);
 
   useEffect(() => {
-    if (width !== -1 && height !== -1) {
+    if (width > -1 && height > -1) {
       const count = 10;
       const numbers = generateRandomNumbersAndPositions(count, width, height);
       setAnswers(numbers);
