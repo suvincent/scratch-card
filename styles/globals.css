@@ -53,7 +53,11 @@ table {
 
 .canvas-container {
   position: relative;
-  width: 65%;
+  width: 90%;
+  margin: auto; /* Centers horizontally */
+  display: flex;
+  justify-content: center; /* Ensures children are centered */
+  align-items: center; /* Centers vertically if parent allows */
 }
 
 .canvas-container canvas {

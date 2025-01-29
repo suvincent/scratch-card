@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 
-const RandomNumbersCanvas = ({ width, height, numbers }:{width: number, height: number, numbers:any[]}) => {
+const AnswerLayer = ({ width, height, numbers }:{width: number, height: number, numbers:any[]}) => {
     const canvasRef = useRef(null);
 
     useEffect(() => {
@@ -19,4 +19,4 @@ const RandomNumbersCanvas = ({ width, height, numbers }:{width: number, height: 
     return <canvas ref={canvasRef} width={width} height={height} style={{zIndex:1}}/>;
 };
 
-export default RandomNumbersCanvas;
+export default AnswerLayer;
