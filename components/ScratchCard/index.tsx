@@ -1,22 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ScratchCardAnswerLayer from './AnswerLayer';
 import ScratchLayer from './ScratchLayer';
-import { generatePrizeData } from '@/lib/random';
 import { item, prize } from '@/lib/type';
 
-const ScratchCard = ({ width, height, numbers, brushSize = 20 }: { width: number, height: number, numbers: item[], brushSize: number }) => {
-    const [winPrizeData, setWinPrizeData] = useState<prize[]>([]); // [number, position, prize]
+const ScratchCard = ({ width, height, numbers, brushSize, winPrizeData }: { width: number, height: number, numbers: item[], brushSize: number, winPrizeData: prize[] }) => {
     const [completeRate, setCompleteRate] = useState(0);
     const [isShow, setIsShow] = useState(false);
     const illustrationRef = useRef<HTMLDivElement>(null)
-
-    useEffect(() => {
-        // numbers are number in canvas
-        if (numbers.length > 0) {
-            const _winPrizeData = generatePrizeData(numbers);
-            setWinPrizeData(_winPrizeData);
-        }
-    }, [numbers]);
 
     useEffect(() => {
         if (completeRate > 70) {

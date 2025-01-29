@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import ScratchCard from "@/components/ScratchCard";
-import { generateRandomNumbersAndPositions } from "@/lib/random";
+import { generatePrizeData, generateRandomNumbersAndPositions } from "@/lib/random";
+import { prize } from "@/lib/type";
 
 export default function FirstGame() {
   const [width, setWidth] = useState(-1);
   const [height, setHeight] = useState(-1);
   const [brushSize, setBrushSize] = useState(20);
-  const [answer, setAnswers] = useState<any[]>([])
+  const [numbers, setNumbers] = useState<any[]>([])
+  const [winPrizeData, setWinPrizeData] = useState<prize[]>([]); // [number, position, prize]
 
   // Function to update the size dynamically
   const updateSize = () => {
@@ -26,8 +28,10 @@ export default function FirstGame() {
   useEffect(() => {
     if (width > -1 && height > -1) {
       const count = 10;
-      const numbers = generateRandomNumbersAndPositions(count, width, height);
-      setAnswers(numbers);
+      const _numbers = generateRandomNumbersAndPositions(count, width, height);
+      const _winPrizeData = generatePrizeData(_numbers);
+      setNumbers(_numbers);
+      setWinPrizeData(_winPrizeData)
     }
   }, [width, height])
 
@@ -36,9 +40,9 @@ export default function FirstGame() {
       <h2>刮刮樂小遊戲</h2>
       {(width > 0 && height > 0)
         ?
-        <ScratchCard width={width} height={height} numbers={answer} brushSize={brushSize} />
+        <ScratchCard width={width} height={height} numbers={numbers} brushSize={brushSize} winPrizeData={winPrizeData}/>
         :
-        <></>
+        <>Loading...</>
       }
     </div>
   );
